@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>¡Feliz Cumpleaños Ema Nohelia y Ema Aurora!</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
+        body {
+            font-family: 'Fredoka', cursive, sans-serif;
+            background: linear-gradient(135deg, #1a0b2e 0%, #2b1055 50%, #591a75 100%);
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            width: 100vw;
+        }
+        .kpop-font {
+            font-family: 'Outfit', sans-serif;
+        }
+        canvas {
+            display: block;
+            box-shadow: 0 10px 30px rgba(255, 105, 180, 0.3);
+            border-radius: 16px;
+        }
+        .btn-kpop {
+            background: linear-gradient(180deg, #ff7eb3 0%, #ff758c 100%);
+            border: 3px solid #ffffff;
+            box-shadow: 0 6px 0px #b3395b, 0 10px 15px rgba(255, 117, 140, 0.4);
+            transition: all 0.1s ease;
+        }
+        .btn-kpop:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0px #b3395b, 0 5px 10px rgba(255, 117, 140, 0.4);
+        }
+        .btn-purple {
+            background: linear-gradient(180deg, #b882ff 0%, #8a41f6 100%);
+            border: 3px solid #ffffff;
+            box-shadow: 0 6px 0px #581eb0, 0 10px 15px rgba(138, 65, 246, 0.4);
+        }
+        .btn-purple:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0px #581eb0, 0 5px 10px rgba(138, 65, 246, 0.4);
+        }
+        .glow-text {
+            text-shadow: 0 0 10px #ff7eb3, 0 0 20px #ff758c, 0 0 30px #e100ff;
+        }
+        .touch-btn {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(5px);
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .touch-btn:active {
+            background: rgba(255, 117, 140, 0.6);
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen text-white relative">
+
+    <!-- PANTALLA DE INICIO Y SELECCIÓN DE PERSONAJE -->
+    <div id="startScreen" class="absolute inset-0 z-50 flex flex-col items-center justify-center p-4 bg-black/70 backdrop-blur-md">
+        <div class="max-w-xl w-full bg-gradient-to-b from-purple-900/90 to-pink-900/90 border-4 border-pink-400 rounded-3xl p-6 sm:p-8 text-center shadow-2xl relative overflow-hidden">
+            <!-- Sparkles decorativos -->
+            <div class="absolute -top-4 -left-4 text-pink-300 text-4xl animate-pulse"><i class="fa-solid fa-sparkles"></i>✨</div>
+            <div class="absolute -top-4 -right-4 text-purple-300 text-4xl animate-pulse"><i class="fa-solid fa-sparkles"></i>💖</div>
+            
+            <span class="inline-block px-4 py-1 bg-pink-500/40 rounded-full text-pink-200 text-sm font-bold tracking-widest uppercase mb-2">
+                🎤 K-Pop Birthday World ✨
+            </span>
+            <h1 class="text-3xl sm:text-5xl font-extrabold glow-text mb-2 tracking-wide kpop-font text-white">
+                SPECIAL STAGE
+            </h1>
+            <p class="text-pink-200 text-base sm:text-lg mb-6">
+                ¡Ayuda a las idols a llegar a la gran fiesta de cumpleaños!
+            </p>
+
+            <h2 class="text-xl font-bold mb-4 text-yellow-300">ELIGE TU PERSONAJE:</h2>
+            
+            <div class="grid grid-cols-2 gap-4 mb-6">
+                <!-- Ema Nohelia -->
+                <button onclick="selectCharacter('nohelia')" id="btn-nohelia" class="p-4 rounded-2xl border-4 border-pink-400 bg-pink-900/50 hover:bg-pink-600/40 transition flex flex-col items-center group cursor-pointer">
+                    <div class="w-24 h-24 rounded-full bg-gradient-to-tr from-pink-400 to-rose-300 p-1 mb-3 shadow-lg group-hover:scale-105 transition">
+                        <canvas id="canvas-nohelia" width="90" height="90" class="rounded-full bg-purple-950"></canvas>
+                    </div>
+                    <span class="text-lg font-black text-pink-200 group-hover:text-white">Ema Nohelia</span>
+                    <span class="text-xs text-pink-300">Style: Pink Queen 👑</span>
+                </button>
+
+                <!-- Ema Aurora -->
+                <button onclick="selectCharacter('aurora')" id="btn-aurora" class="p-4 rounded-2xl border-4 border-purple-400 bg-purple-900/50 hover:bg-purple-600/40 transition flex flex-col items-center group cursor-pointer">
+                    <div class="w-24 h-24 rounded-full bg-gradient-to-tr from-purple-400 to-indigo-300 p-1 mb-3 shadow-lg group-hover:scale-105 transition">
+                        <canvas id="canvas-aurora" width="90" height="90" class="rounded-full bg-purple-950"></canvas>
+                    </div>
+                    <span class="text-lg font-black text-purple-200 group-hover:text-white">Ema Aurora</span>
+                    <span class="text-xs text-purple-300">Style: Violet Star 🌟</span>
+                </button>
+            </div>
+
+            <button onclick="startGame()" class="w-full py-4 text-xl font-black rounded-2xl btn-kpop text-white uppercase tracking-wider cursor-pointer">
+                ¡EMPEZAR LA AVENTURA! 🚀
+            </button>
+            
+            <div class="mt-4 text-xs text-pink-300/80">
+                Usa ◄ ► o WASD para moverte | ESPACIO / ▲ para Saltar
+            </div>
+        </div>
+    </div>
+
+    <!-- PANTALLA PRINCIPAL DEL JUEGO -->
+    <div class="relative w-full max-w-4xl h-full max-h-[600px] flex flex-col items-center justify-center p-2">
+        <!-- BARRA SUPERIOR DE ESTADO -->
+        <div class="w-full flex justify-between items-center bg-black/40 backdrop-blur-md px-4 py-2 rounded-2xl border border-pink-500/30 mb-2">
+            <div class="flex items-center gap-3">
+                <span id="playerBadge" class="px-3 py-1 bg-pink-500 font-bold text-xs sm:text-sm rounded-full">Ema</span>
+                <span class="text-yellow-300 font-bold text-sm sm:text-base flex items-center gap-1">
+                    ✨ <span id="scoreText">0</span>
+                </span>
+            </div>
+            <div class="text-pink-300 font-bold text-xs sm:text-sm flex items-center gap-2">
+                <span>🎵 K-POP STAGE</span>
+                <button onclick="toggleSound()" id="soundBtn" class="bg-white/10 p-1.5 rounded-lg hover:bg-white/20">
+                    <i class="fa-solid fa-volume-high"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- CANVAS DEL JUEGO -->
+        <div class="relative w-full flex-1 flex items-center justify-center overflow-hidden rounded-2xl">
+            <canvas id="gameCanvas" class="w-full h-full object-contain"></canvas>
+            
+            <!-- CONTROLES TÁCTILES MÓVILES -->
+            <div id="touchControls" class="absolute bottom-3 left-3 right-3 flex justify-between items-center pointer-events-none md:hidden">
+                <div class="flex gap-2 pointer-events-auto">
+                    <button id="btnLeft" class="touch-btn w-14 h-14 rounded-2xl flex items-center justify-center text-2xl text-white">◄</button>
+                    <button id="btnRight" class="touch-btn w-14 h-14 rounded-2xl flex items-center justify-center text-2xl text-white">►</button>
+                </div>
+                <div class="pointer-events-auto">
+                    <button id="btnJump" class="touch-btn w-16 h-16 rounded-full bg-pink-500/50 border-2 border-pink-300 flex items-center justify-center text-2xl text-white shadow-lg">▲</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PANTALLA VICTORIA / REGALO GIGANTE -->
+    <div id="victoryModal" class="hidden absolute inset-0 z-50 flex flex-col items-center justify-center p-4 bg-black/80 backdrop-blur-lg">
+        <div class="max-w-2xl w-full bg-gradient-to-b from-purple-900 via-pink-900 to-rose-950 border-4 border-yellow-300 rounded-3xl p-6 sm:p-8 text-center shadow-2xl relative overflow-hidden animate-bounce-short">
+            
+            <div class="text-4xl sm:text-6xl mb-2">🎂🎉🎁✨</div>
+            
+            <h1 class="text-3xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 via-pink-300 to-yellow-100 glow-text mb-2 kpop-font">
+                ¡FELIZ CUMPLEAÑOS!
+            </h1>
+            
+            <h2 class="text-2xl sm:text-4xl font-extrabold text-pink-300 mb-4 tracking-wide">
+                EMA NOHELIA Y EMA AURORA
+            </h2>
+
+            <div class="bg-white/10 border border-pink-300/30 rounded-2xl p-4 sm:p-6 mb-6 text-pink-100 text-sm sm:text-lg leading-relaxed shadow-inner">
+                <p class="mb-2">🌟 ¡Las idols más geniales y brillantes del mundo! 🌟</p>
+                <p>Que este día esté lleno de música, risas, sorpresas mágicas y muchísimos momentos felices juntas. ¡Sigan brillando como verdaderas estrellas K-Pop! 💖🎤👑</p>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button onclick="restartGame()" class="py-4 px-8 text-lg font-black rounded-2xl btn-kpop text-white uppercase tracking-wider cursor-pointer flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-rotate-right"></i> JUGAR DE NUEVO
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- AUDIO SYNTHESIZER (SIN ARCHIVOS EXTERNOS) ---
+        class KPopAudio {
+            constructor() {
+                this.ctx = null;
+                this.muted = false;
+                this.bgmTimer = null;
+            }
+
+            init() {
+                if (!this.ctx) {
+                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+            }
+
+            playTone(freq, type, duration, vol = 0.1) {
+                if (this.muted || !this.ctx) return;
+                try {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = type;
+                    osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+                    gain.gain.setValueAtTime(vol, this.ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start();
+                    osc.stop(this.ctx.currentTime + duration);
+                } catch(e){}
+            }
+
+            jump() {
+                if (this.muted || !this.ctx) return;
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(300, now);
+                osc.frequency.exponentialRampToValueAtTime(700, now + 0.15);
+                gain.gain.setValueAtTime(0.15, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.15);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start(now);
+                osc.stop(now + 0.15);
+            }
+
+            collect() {
+                this.playTone(880, 'triangle', 0.1, 0.12);
+                setTimeout(() => this.playTone(1320, 'sine', 0.15, 0.12), 60);
+            }
+
+            spring() {
+                if (this.muted || !this.ctx) return;
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(200, now);
+                osc.frequency.exponentialRampToValueAtTime(900, now + 0.3);
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.3);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start(now);
+                osc.stop(now + 0.3);
+            }
+
+            win() {
+                const notes = [523.25, 659.25, 783.99, 1046.50, 880, 1046.50];
+                notes.forEach((freq, idx) => {
+                    setTimeout(() => this.playTone(freq, 'sine', 0.3, 0.2), idx * 120);
+                });
+            }
+
+            startBGM() {
+                if (this.bgmTimer) return;
+                const melody = [
+                    523.25, 523.25, 659.25, 783.99, 659.25, 783.99, 880, 783.99,
+                    659.25, 523.25, 587.33, 659.25, 587.33, 523.25, 440, 523.25
+                ];
+                let noteIdx = 0;
+                this.bgmTimer = setInterval(() => {
+                    if (!this.muted && this.ctx) {
+                        this.playTone(melody[noteIdx], 'sine', 0.18, 0.04);
+                        noteIdx = (noteIdx + 1) % melody.length;
+                    }
+                }, 200);
+            }
+
+            stopBGM() {
+                if (this.bgmTimer) {
+                    clearInterval(this.bgmTimer);
+                    this.bgmTimer = null;
+                }
+            }
+        }
+
+        const audio = new KPopAudio();
+
+        function toggleSound() {
+            audio.muted = !audio.muted;
+            document.getElementById('soundBtn').innerHTML = audio.muted ? 
+                '<i class="fa-solid fa-volume-xmark text-red-400"></i>' : 
+                '<i class="fa-solid fa-volume-high"></i>';
+        }
+
+        // --- CONFIGURACIÓN Y VARIABLES DEL JUEGO ---
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let selectedHero = 'nohelia'; // 'nohelia' o 'aurora'
+        let gameActive = false;
+        let cameraX = 0;
+        let score = 0;
+        let giftOpened = false;
+
+        // Ajustar resolución del canvas
+        function resizeCanvas() {
+            canvas.width = 800;
+            canvas.height = 450;
+        }
+        resizeCanvas();
+
+        // --- DIBUJO DE PREVISUALIZACIÓN DE PERSONAJES ---
+        function drawAvatarPreview(canvasId, heroType) {
+            const cvs = document.getElementById(canvasId);
+            const c = cvs.getContext('2d');
+            c.clearRect(0, 0, cvs.width, cvs.height);
+
+            const isNohelia = heroType === 'nohelia';
+            const hairColor = isNohelia ? '#ff4d8d' : '#8a2be2';
+            const outfitColor = isNohelia ? '#ff758c' : '#b882ff';
+
+            // Cabeza
+            c.fillStyle = '#ffe0bd';
+            c.beginPath();
+            c.arc(45, 40, 22, 0, Math.PI * 2);
+            c.fill();
+
+            // Pelo posterior (Coletas)
+            c.fillStyle = hairColor;
+            c.beginPath();
+            c.arc(22, 38, 12, 0, Math.PI * 2);
+            c.arc(68, 38, 12, 0, Math.PI * 2);
+            c.fill();
+
+            // Pelo frontal / Flequillo
+            c.beginPath();
+            c.arc(45, 34, 23, Math.PI, Math.PI * 2);
+            c.fill();
+
+            // Ojos
+            c.fillStyle = '#333';
+            c.beginPath();
+            c.arc(38, 42, 3, 0, Math.PI * 2);
+            c.arc(52, 42, 3, 0, Math.PI * 2);
+            c.fill();
+
+            // Sombra/Brillo ojos
+            c.fillStyle = '#fff';
+            c.beginPath();
+            c.arc(37, 41, 1, 0, Math.PI * 2);
+            c.arc(51, 41, 1, 0, Math.PI * 2);
+            c.fill();
+
+            // Mejillas sonrojadas
+            c.fillStyle = 'rgba(255, 105, 180, 0.5)';
+            c.beginPath();
+            c.arc(34, 46, 4, 0, Math.PI * 2);
+            c.arc(56, 46, 4, 0, Math.PI * 2);
+            c.fill();
+
+            // Sonrisa
+            c.strokeStyle = '#e6005c';
+            c.lineWidth = 2;
+            c.beginPath();
+            c.arc(45, 47, 4, 0, Math.PI);
+            c.stroke();
+
+            // Corona/Moño
+            c.fillStyle = '#ffd700';
+            if (isNohelia) {
+                // Corona
+                c.beginPath();
+                c.moveTo(35, 18);
+                c.lineTo(40, 25);
+                c.lineTo(45, 15);
+                c.lineTo(50, 25);
+                c.lineTo(55, 18);
+                c.lineTo(53, 27);
+                c.lineTo(37, 27);
+                c.closePath();
+                c.fill();
+            } else {
+                // Lazos púrpuras
+                c.fillStyle = '#e100ff';
+                c.beginPath();
+                c.arc(26, 26, 6, 0, Math.PI * 2);
+                c.arc(64, 26, 6, 0, Math.PI * 2);
+                c.fill();
+            }
+
+            // Cuerpo / Vestido Idol
+            c.fillStyle = outfitColor;
+            c.beginPath();
+            c.moveTo(33, 62);
+            c.lineTo(57, 62);
+            c.lineTo(63, 85);
+            c.lineTo(27, 85);
+            c.closePath();
+            c.fill();
+        }
+
+        drawAvatarPreview('canvas-nohelia', 'nohelia');
+        drawAvatarPreview('canvas-aurora', 'aurora');
+
+        function selectCharacter(hero) {
+            selectedHero = hero;
+            document.getElementById('btn-nohelia').classList.toggle('ring-4', hero === 'nohelia');
+            document.getElementById('btn-nohelia').classList.toggle('ring-pink-300', hero === 'nohelia');
+            document.getElementById('btn-aurora').classList.toggle('ring-4', hero === 'aurora');
+            document.getElementById('btn-aurora').classList.toggle('ring-purple-300', hero === 'aurora');
+        }
+        selectCharacter('nohelia');
+
+        // --- CLASE JUGADOR ---
+        class Player {
+            constructor() {
+                this.x = 80;
+                this.y = 200;
+                this.width = 36;
+                this.height = 54;
+                this.vx = 0;
+                this.vy = 0;
+                this.speed = 4.5;
+                this.jumpPower = -11.5;
+                this.grounded = false;
+                this.scale = 1;
+                this.targetScale = 1;
+            }
+
+            update() {
+                this.vy += 0.5; // Gravedad
+                this.x += this.vx;
+                this.y += this.vy;
+
+                // Transición suave de crecimiento al abrir el regalo
+                if (this.scale < this.targetScale) {
+                    this.scale += 0.02;
+                    this.width = 36 * this.scale;
+                    this.height = 54 * this.scale;
+                }
+
+                // Limite inferior del mundo (caída)
+                if (this.y > canvas.height + 100) {
+                    this.respawn();
+                }
+            }
+
+            respawn() {
+                this.x = Math.max(80, cameraX + 50);
+                this.y = 100;
+                this.vy = 0;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
+
+                const isNohelia = selectedHero === 'nohelia';
+                const hairColor = isNohelia ? '#ff4d8d' : '#8a2be2';
+                const outfitColor = isNohelia ? '#ff758c' : '#b882ff';
+
+                const w = this.width;
+                const h = this.height;
+
+                // Sombras
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+                ctx.beginPath();
+                ctx.ellipse(0, h / 2 - 2, w / 2, 6, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Vestido K-Pop
+                ctx.fillStyle = outfitColor;
+                ctx.beginPath();
+                ctx.moveTo(-w * 0.3, h * 0.1);
+                ctx.lineTo(w * 0.3, h * 0.1);
+                ctx.lineTo(w * 0.45, h * 0.45);
+                ctx.lineTo(-w * 0.45, h * 0.45);
+                ctx.closePath();
+                ctx.fill();
+
+                // Cabeza
+                ctx.fillStyle = '#ffe0bd';
+                ctx.beginPath();
+                ctx.arc(0, -h * 0.15, w * 0.4, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Pelo posterior
+                ctx.fillStyle = hairColor;
+                ctx.beginPath();
+                ctx.arc(-w * 0.35, -h * 0.2, w * 0.22, 0, Math.PI * 2);
+                ctx.arc(w * 0.35, -h * 0.2, w * 0.22, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Flequillo
+                ctx.beginPath();
+                ctx.arc(0, -h * 0.25, w * 0.42, Math.PI, Math.PI * 2);
+                ctx.fill();
+
+                // Ojos Idol
+                ctx.fillStyle = '#222';
+                ctx.beginPath();
+                ctx.arc(-w * 0.12, -h * 0.15, w * 0.06, 0, Math.PI * 2);
+                ctx.arc(w * 0.12, -h * 0.15, w * 0.06, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Brillos en los ojos
+                ctx.fillStyle = '#fff';
+                ctx.beginPath();
+                ctx.arc(-w * 0.14, -h * 0.17, w * 0.025, 0, Math.PI * 2);
+                ctx.arc(w * 0.1, -h * 0.17, w * 0.025, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Colorete / Sonrisa
+                ctx.fillStyle = 'rgba(255, 105, 180, 0.6)';
+                ctx.beginPath();
+                ctx.arc(-w * 0.2, -h * 0.08, w * 0.07, 0, Math.PI * 2);
+                ctx.arc(w * 0.2, -h * 0.08, w * 0.07, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Sonrisa
+                ctx.strokeStyle = '#d6006e';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(0, -h * 0.08, w * 0.08, 0, Math.PI);
+                ctx.stroke();
+
+                // Adorno Pelo (Corona o Estrella)
+                ctx.fillStyle = '#ffd700';
+                if (isNohelia) {
+                    // Tiara
+                    ctx.beginPath();
+                    ctx.moveTo(-w * 0.2, -h * 0.42);
+                    ctx.lineTo(0, -h * 0.48);
+                    ctx.lineTo(w * 0.2, -h * 0.42);
+                    ctx.lineTo(0, -h * 0.38);
+                    ctx.fill();
+                } else {
+                    // Estrella
+                    ctx.beginPath();
+                    ctx.arc(w * 0.25, -h * 0.38, w * 0.1, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                // Micrófono en mano
+                ctx.fillStyle = '#aaa';
+                ctx.fillRect(w * 0.3, 0, 4, 12);
+                ctx.fillStyle = '#ff007f';
+                ctx.beginPath();
+                ctx.arc(w * 0.3 + 2, 0, 4, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.restore();
+            }
+        }
+
+        // --- MAPA DEL NIVEL (PLATAFORMAS Y OBJETOS) ---
+        let player = new Player();
+        let platforms = [];
+        let items = [];
+        let springs = [];
+        let giftBox = null;
+        let particles = [];
+
+        function generateLevel() {
+            platforms = [];
+            items = [];
+            springs = [];
+            particles = [];
+
+            // Suelo inicial
+            platforms.push({ x: 0, y: 380, w: 600, h: 70, type: 'stage' });
+
+            // Serie de plataformas K-Pop flotantes y dinámicas
+            const levelData = [
+                { x: 250, y: 290, w: 120, h: 24, item: 'lightstick' },
+                { x: 440, y: 220, w: 140, h: 24, item: 'star', spring: true },
+                { x: 650, y: 320, w: 150, h: 24, item: 'mic' },
+                { x: 880, y: 250, w: 130, h: 24, item: 'cupcake' },
+                { x: 1080, y: 180, w: 160, h: 24, item: 'lightstick', moving: true, range: 80 },
+                { x: 1320, y: 280, w: 140, h: 24, item: 'star', spring: true },
+                { x: 1530, y: 340, w: 200, h: 24, item: 'mic' },
+                { x: 1800, y: 260, w: 150, h: 24, item: 'cupcake' },
+                { x: 2020, y: 190, w: 180, h: 24, item: 'star' },
+                // Gran plataforma final del cumpleaños
+                { x: 2280, y: 350, w: 600, h: 100, type: 'finalStage' }
+            ];
+
+            levelData.forEach(p => {
+                platforms.push({
+                    x: p.x,
+                    y: p.y,
+                    w: p.w,
+                    h: p.h,
+                    type: p.type || 'cloud',
+                    moving: p.moving || false,
+                    originX: p.x,
+                    range: p.range || 0,
+                    dir: 1
+                });
+
+                if (p.item) {
+                    items.push({
+                        x: p.x + p.w / 2,
+                        y: p.y - 30,
+                        type: p.item,
+                        collected: false,
+                        floatOffset: Math.random() * Math.PI * 2
+                    });
+                }
+
+                if (p.spring) {
+                    springs.push({
+                        x: p.x + p.w / 2 - 15,
+                        y: p.y - 12,
+                        w: 30,
+                        h: 12,
+                        pressed: false
+                    });
+                }
+            });
+
+            // Regalo Gigante al final
+            giftBox = {
+                x: 2600,
+                y: 250,
+                w: 100,
+                h: 100,
+                opened: false
+            };
+        }
+
+        // --- SISTEMA DE TECLADO Y TECLAS ---
+        const keys = {};
+        window.addEventListener('keydown', e => {
+            keys[e.code] = true;
+            if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) {
+                e.preventDefault();
+            }
+        });
+        window.addEventListener('keyup', e => keys[e.code] = false);
+
+        // --- CONTROLES TÁCTILES ---
+        const setupTouchButton = (id, keyName) => {
+            const btn = document.getElementById(id);
+            btn.addEventListener('touchstart', (e) => { e.preventDefault(); keys[keyName] = true; });
+            btn.addEventListener('touchend', (e) => { e.preventDefault(); keys[keyName] = false; });
+            btn.addEventListener('mousedown', (e) => { keys[keyName] = true; });
+            btn.addEventListener('mouseup', (e) => { keys[keyName] = false; });
+        };
+        setupTouchButton('btnLeft', 'ArrowLeft');
+        setupTouchButton('btnRight', 'ArrowRight');
+        setupTouchButton('btnJump', 'Space');
+
+        // --- EFECTOS DE PARTÍCULAS Y CONFETI ---
+        function createConfetti(x, y, count = 50) {
+            const colors = ['#ff758c', '#b882ff', '#ffd700', '#00f0ff', '#ff007f'];
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x: x,
+                    y: y,
+                    vx: (Math.random() - 0.5) * 12,
+                    vy: (Math.random() - 0.8) * 12,
+                    size: Math.random() * 8 + 4,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    life: 100
+                });
+            }
+        }
+
+        // --- ACTUALIZACIÓN BUCLE PRINCIPAL ---
+        function update() {
+            if (!gameActive) return;
+
+            // Movimiento lateral
+            if (keys['ArrowLeft'] || keys['KeyA']) {
+                player.vx = -player.speed;
+            } else if (keys['ArrowRight'] || keys['KeyD']) {
+                player.vx = player.speed;
+            } else {
+                player.vx *= 0.8;
+            }
+
+            // Salto
+            if ((keys['Space'] || keys['ArrowUp'] || keys['KeyW']) && player.grounded) {
+                player.vy = player.jumpPower;
+                player.grounded = false;
+                audio.jump();
+            }
+
+            player.update();
+            player.grounded = false;
+
+            // Colisión con plataformas
+            platforms.forEach(p => {
+                if (p.moving) {
+                    p.x += p.dir * 1.5;
+                    if (Math.abs(p.x - p.originX) > p.range) p.dir *= -1;
+                }
+
+                if (player.x + player.width > p.x &&
+                    player.x < p.x + p.w &&
+                    player.y + player.height >= p.y &&
+                    player.y + player.height <= p.y + p.h + player.vy &&
+                    player.vy >= 0) {
+                    
+                    player.grounded = true;
+                    player.vy = 0;
+                    player.y = p.y - player.height;
+
+                    if (p.moving) player.x += p.dir * 1.5;
+                }
+            });
+
+            // Colisión con muelles musicales (Springs)
+            springs.forEach(s => {
+                if (player.x + player.width > s.x &&
+                    player.x < s.x + s.w &&
+                    player.y + player.height >= s.y &&
+                    player.y + player.height <= s.y + s.h + 10) {
+                    
+                    player.vy = -16; // Super salto K-Pop
+                    audio.spring();
+                    createConfetti(s.x + s.w / 2, s.y, 10);
+                }
+            });
+
+            // Colección de ítems
+            items.forEach(item => {
+                if (!item.collected) {
+                    const dist = Math.hypot((player.x + player.width / 2) - item.x, (player.y + player.height / 2) - item.y);
+                    if (dist < 35) {
+                        item.collected = true;
+                        score += 100;
+                        document.getElementById('scoreText').innerText = score;
+                        audio.collect();
+                        createConfetti(item.x, item.y, 15);
+                    }
+                }
+            });
+
+            // Interacción con el Regalo Cumpleaños Final
+            if (giftBox && !giftBox.opened) {
+                if (player.x + player.width > giftBox.x &&
+                    player.x < giftBox.x + giftBox.w &&
+                    player.y + player.height > giftBox.y) {
+                    
+                    giftBox.opened = true;
+                    giftOpened = true;
+                    player.targetScale = 2.2; // ¡Crece como Super Mario para leerlo super bien!
+                    audio.win();
+                    createConfetti(giftBox.x + giftBox.w / 2, giftBox.y + giftBox.h / 2, 150);
+
+                    setTimeout(() => {
+                        document.getElementById('victoryModal').classList.remove('hidden');
+                    }, 1500);
+                }
+            }
+
+            // Actualizar Cámara (Seguimiento suave)
+            const targetCamX = player.x - canvas.width / 3;
+            cameraX += (targetCamX - cameraX) * 0.1;
+            cameraX = Math.max(0, cameraX);
+
+            // Actualizar Partículas
+            particles.forEach((p, index) => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.2;
+                p.life--;
+                if (p.life <= 0) particles.splice(index, 1);
+            });
+        }
+
+        // --- RENDERIZADO DEL JUEGO ---
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Fondo Degradado K-Pop
+            const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            grad.addColorStop(0, '#2b1055');
+            grad.addColorStop(0.5, '#591a75');
+            grad.addColorStop(1, '#a12a78');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.save();
+            ctx.translate(-cameraX, 0);
+
+            // Dibujar Plataformas
+            platforms.forEach(p => {
+                if (p.type === 'stage' || p.type === 'finalStage') {
+                    // Escenario de concierto K-Pop
+                    ctx.fillStyle = '#ff758c';
+                    ctx.fillRect(p.x, p.y, p.w, p.h);
+                    ctx.fillStyle = '#fff';
+                    ctx.fillRect(p.x, p.y, p.w, 6);
+                    
+                    // Focos de luz decorativos
+                    for (let lx = p.x + 20; lx < p.x + p.w; lx += 40) {
+                        ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+                        ctx.beginPath();
+                        ctx.arc(lx, p.y + 20, 6, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                } else {
+                    // Nubes pastel / Plataformas flotantes
+                    ctx.fillStyle = '#ffffff';
+                    ctx.beginPath();
+                    ctx.roundRect(p.x, p.y, p.w, p.h, 12);
+                    ctx.fill();
+                    ctx.fillStyle = '#ffb6c1';
+                    ctx.fillRect(p.x + 4, p.y + p.h - 5, p.w - 8, 4);
+                }
+            });
+
+            // Dibujar Muelles Musicales
+            springs.forEach(s => {
+                ctx.fillStyle = '#ffd700';
+                ctx.beginPath();
+                ctx.roundRect(s.x, s.y, s.w, s.h, 4);
+                ctx.fill();
+                ctx.fillStyle = '#ff007f';
+                ctx.font = '10px sans-serif';
+                ctx.fillText('🎵', s.x + 8, s.y + 10);
+            });
+
+            // Dibujar Objetos Coleccionables
+            const time = Date.now() * 0.005;
+            items.forEach(item => {
+                if (!item.collected) {
+                    const offsetY = Math.sin(time + item.floatOffset) * 5;
+                    ctx.save();
+                    ctx.translate(item.x, item.y + offsetY);
+
+                    if (item.type === 'lightstick') {
+                        ctx.fillStyle = '#ff007f';
+                        ctx.beginPath(); ctx.arc(0, -8, 10, 0, Math.PI * 2); ctx.fill();
+                        ctx.fillStyle = '#fff'; ctx.fillRect(-3, 2, 6, 12);
+                    } else if (item.type === 'star') {
+                        ctx.fillStyle = '#ffd700';
+                        ctx.font = '22px sans-serif';
+                        ctx.fillText('⭐', -11, 8);
+                    } else if (item.type === 'mic') {
+                        ctx.fillStyle = '#00f0ff';
+                        ctx.font = '22px sans-serif';
+                        ctx.fillText('🎤', -11, 8);
+                    } else if (item.type === 'cupcake') {
+                        ctx.font = '22px sans-serif';
+                        ctx.fillText('🧁', -11, 8);
+                    }
+                    ctx.restore();
+                }
+            });
+
+            // Dibujar Caja de Regalo Gigante de Cumpleaños
+            if (giftBox) {
+                ctx.save();
+                ctx.translate(giftBox.x, giftBox.y);
+                
+                if (!giftBox.opened) {
+                    // Caja rosa brillante
+                    ctx.fillStyle = '#ff1493';
+                    ctx.fillRect(0, 0, giftBox.w, giftBox.h);
+                    
+                    // Cinta amarilla de regalo
+                    ctx.fillStyle = '#ffd700';
+                    ctx.fillRect(giftBox.w / 2 - 10, 0, 20, giftBox.h);
+                    ctx.fillRect(0, giftBox.h / 2 - 10, giftBox.w, 20);
+
+                    // Moño
+                    ctx.beginPath();
+                    ctx.arc(giftBox.w / 2 - 15, -10, 15, 0, Math.PI * 2);
+                    ctx.arc(giftBox.w / 2 + 15, -10, 15, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Brillos
+                    ctx.fillStyle = '#ffffff';
+                    ctx.font = '16px sans-serif';
+                    ctx.fillText('✨ ABRIR ✨', 10, -25);
+                } else {
+                    // Regalo Abierto
+                    ctx.fillStyle = '#ff69b4';
+                    ctx.fillRect(0, 40, giftBox.w, giftBox.h - 40);
+                    ctx.fillStyle = '#ffd700';
+                    ctx.font = '30px sans-serif';
+                    ctx.fillText('🎉', 35, 30);
+                }
+                ctx.restore();
+            }
+
+            // Dibujar Jugador
+            player.draw();
+
+            // Dibujar Partículas / Confeti
+            particles.forEach(p => {
+                ctx.fillStyle = p.color;
+                ctx.fillRect(p.x, p.y, p.size, p.size);
+            });
+
+            ctx.restore();
+        }
+
+        // BUCLE DE JUEGO (GAME LOOP)
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        function startGame() {
+            audio.init();
+            audio.startBGM();
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('playerBadge').innerText = selectedHero === 'nohelia' ? 'Ema Nohelia 👑' : 'Ema Aurora 🌟';
+            
+            player = new Player();
+            score = 0;
+            document.getElementById('scoreText').innerText = '0';
+            generateLevel();
+            gameActive = true;
+        }
+
+        function restartGame() {
+            document.getElementById('victoryModal').classList.add('hidden');
+            startGame();
+        }
+
+        // Iniciar bucle al cargar la página
+        window.onload = () => {
+            gameLoop();
+        };
+    </script>
+</body>
+</html>
